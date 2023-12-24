@@ -7,6 +7,16 @@ torch
 
 whisper
 
+ffmpeg (install through chocolatey or install the binary from their website and add the path to your system path. )
+
+> If you're unable to add ffmpeg to your path, you'll need to add it temporarily anytime you're in the command prompt, with the following command: 
+
+```
+set PATH=%PATH%;C:\path\to\ffmpeg\bin
+```
+
+ffmpeg-python
+
 ## How to use this script
 You simply save this script and then run it with 
 ```
@@ -14,7 +24,9 @@ python transcribe.py
 ```
 Then a file dialog will pop up and wait for you to browse to and select the file that you want to transcribe. Once done, it will take a few moments (may take minutes, depending on file size) and transcribe the audio/video file. Then it will output a transcript.txt file in the same directory that you ran this script from. 
 
-Then run the transcript_check.py file and it will search the transcript for key terms and return to you which line they're on. 
+Then run the transcript_check.py file and it will search the transcript for key terms and return to you which line they're on.
+
+
 
 ## Whisper docs: 
 [Docs](https://github.com/openai/whisper)
