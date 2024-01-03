@@ -6,8 +6,15 @@ import os
 import sys
 import re
 
+# TODO
+# Accept multiple files at a time and place transcripts in their respective files
+# Rename transcripts to match their respective video file
+# Create a selection box to allow user to select base, medium, or large AI model
+
 # options are base, tiny, medium, and large
 loaded_model = "base"
+
+# input_folder = filedialog.askdirectory()
 
 
 pattern = re.compile(r"(?<!\d:)(?<!-\s)\d(?!\d*:)(?!\d*-\s)")
@@ -20,11 +27,32 @@ output_file_name = f"{output_path}\\transcript_{now}.txt"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model = whisper.load_model(loaded_model).to(device)
 
-try:
-    result = model.transcribe(input_file, fp16=False)
-except Exception as e:
-    print("Error transcribing: ", e)
 
+def return_files(input_folder):
+    files = os.listdir(input_folder)
+    files = [file for file in files if os.path.isfile(os.path.join(input_folder, file))]
+    results = []
+    for i in files:
+        try:
+            result = model.transcribe(i, fp16=False)
+            results.append(result)
+        except Exception as e:
+            result = "Exception transcribing {i} -- {e}"
+            print(f"Exception transcribing {i} -- {e}")
+            return result
+
+    return results
+
+
+def transcode_file(input_file):
+    try:
+        result = model.transcribe(input_file, fp16=False)
+    except Exception as e:
+        print("Error transcribing: ", e)
+    return result
+
+
+transcode_file(input_file)
 
 try:
     with open(output_file_name, "w", encoding="utf-8") as f:
